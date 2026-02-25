@@ -13,6 +13,7 @@ export default function ModalCreateCar({ closeModal }: { closeModal: () => void 
 
     async function btnCreate() {
         setWork(true)
+        setErrors({})
         const id_car_category_fk = Number(category)
         const id_car_brand_fk = Number(brand)
 
