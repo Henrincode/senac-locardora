@@ -1,21 +1,23 @@
 export interface CarModel {
-    id_car_model?: number | undefined
-    id_car_brand_fk?: number | undefined
-    id_car_category_fk?: number | undefined
-    name?: string | undefined
-    category?: string | undefined
-    brand?: string | undefined
-    details?: string | undefined
-    image_url?: string | undefined
-    created_at?: Date | undefined
-    deleted_at?: Date | undefined
+    id_car_model?: number
+    id_car_brand_fk?: number
+    id_car_category_fk?: number
+    name?: string
+    category?: string | null
+    brand?: string | null
+    details?: string | null
+    image_url?: string | null
+    created_at?: Date | null
+    deleted_at?: Date | null
 }
 
-export type CarErrors = Record<string, string | boolean>
+export type CarModelErrors = {
+    [K in keyof Omit<CarModel, 'category' | 'brand'>]?: boolean
+}
 
-export interface CarsReturn {
-    data?: CarModel[]
-    success?: boolean
+export interface CarModelReturn<T> {
+    data?: T
+    success: boolean
     message?: string
-    errors?: CarErrors
+    errors?: CarModelErrors
 }

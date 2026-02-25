@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import ModalCreateCar from "./_components/ModalCreateCar"
 import ModalCreateCategory from "./_components/ModalCreateCategory"
 import ModalCreateBrand from "./_components/ModalCreateBrand"
+import { CarModel, CarModelReturn } from "@/types/car.types"
+import { deleteCarModel } from "@/server/actions/car.action"
 
-export default function ClientViewAdmin() {
+export default function ClientViewAdmin({ cars }: { cars: CarModelReturn<CarModel[]> }) {
     const [modal, setModal] = useState('')
 
     function openModal(param: string) {
@@ -15,7 +17,7 @@ export default function ClientViewAdmin() {
     function closeModal() {
         setModal('')
     }
-
+    
     useEffect(() => {
         if (modal) {
             document.body.classList.add('overflow-hidden')
@@ -34,7 +36,7 @@ export default function ClientViewAdmin() {
         ">
             {/* modal */}
             <div onMouseDown={closeModal} className={`${modal ? "absolute" : "hidden"} flex justify-center items-center w-dvw h-dvh backdrop-blur`}>
-                {modal === 'car' && <ModalCreateCar />}
+                {modal === 'car' && <ModalCreateCar closeModal={closeModal} />}
                 {modal === 'category' && <ModalCreateCategory />}
                 {modal === 'brand' && <ModalCreateBrand />}
             </div>
@@ -89,10 +91,13 @@ export default function ClientViewAdmin() {
                 </div>
                 {/* list */}
                 <div className="flex-1 p-2 border-3 rounded-lg border-gray-400">
-                    <ul>
+                    <ul className="flex flex-row gap-2">
                         <li>
                             <button onClick={() => setModal('car')} className="p-2 rounded-lg text-white bg-blue-600 hover:bg-blue-700 cursor-pointer">Adicionar</button>
                         </li>
+                        {cars.data?.map((c: CarModel, i: number) => (
+                            <li onClick={() => c.id_car_model && deleteCarModel(c.id_car_model)} key={i} className="bg-amber-50">{c.name}</li>
+                        ))}
                     </ul>
                 </div>
             </div>

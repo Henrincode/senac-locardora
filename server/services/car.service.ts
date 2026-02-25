@@ -7,16 +7,16 @@ const findModels = unstable_cache(
     async (): Promise<CarModel[]> => {
         const data = await sql`
             SELECT
-                id_car_model,
-                id_car_brand_fk,
-                id_car_category_fk,
-                name,
-                details,
-                image_url,
-                created_at,
-                deleted_at
-                category cat.name,
-                brand bra.name
+                car.id_car_model,
+                car.id_car_brand_fk,
+                car.id_car_category_fk,
+                car.name,
+                car.details,
+                car.image_url,
+                car.created_at,
+                car.deleted_at,
+                cat.name as category,
+                bra.name as brand
             from alc_car_models car
             inner join alc_car_categories cat
                 on car.id_car_category_fk = cat.id_car_category
@@ -36,31 +36,34 @@ const findModels = unstable_cache(
 
 // create
 async function createModel(
-    params: CarModel & { id_car_model: number, name: string }
-) {
-    await sql`
+    params: CarModel & { name: string }
+): Promise<CarModel> {
+    const [data] = await sql`
         INSERT INTO alc_car_models ${sql(params)}
     `
+    return data
 }
 
 // update
 async function updateModel(
     params: CarModel & { id_car_model: number }
-) {
-    await sql`
+): Promise<CarModel> {
+    const [data] = await sql`
         UPDATE alc_car_models set ${sql(params)}
         where id_car_model = ${params.id_car_model}
     `
+    return data
 }
 
 // delete
 async function deleteModel(
-    params: CarModel & { id_car_model: number }
-) {
-    await sql`
+    id: number
+): Promise<CarModel> {
+    const [data] = await sql`
         DELETE from alc_car_models
-        where id_car_model = ${params.id_car_model}
+        where id_car_model = ${id}
     `
+    return data
 }
 
 const carService = {
