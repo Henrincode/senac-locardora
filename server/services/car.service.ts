@@ -144,7 +144,7 @@ async function deleteCategory(id: number): Promise<CarCategory> {
 const findBrands = unstable_cache(
     async (): Promise<CarBrand[]> => {
         const data: CarBrand[] = await sql`
-        SELECT * from alc_car_brand
+        SELECT * from alc_car_brands
     `
         return data.map((d: CarBrand) => ({
             ...d,

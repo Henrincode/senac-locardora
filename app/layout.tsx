@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Alucar",
+  title: "Locardora",
   description: "Alugue fácil!",
 };
 

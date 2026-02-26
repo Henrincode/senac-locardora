@@ -209,7 +209,6 @@ export async function deleteCarCategory(id: number): Promise<CarCategoryReturn<C
 export async function findCarBrands(): Promise<CarBrandReturn<CarBrand[]>> {
     try {
         const data = await carService.findBrands()
-        updateTag('cars')
         return { success: true, data }
     } catch (error) {
         console.error('ERROR ACTION findCarBrands', error)
@@ -224,7 +223,6 @@ export async function findCarBrandById(id: number): Promise<CarBrandReturn<CarBr
 
     try {
         const data = await carService.findBrandById(id)
-        updateTag('cars')
         return { success: true, data }
     } catch (error) {
         console.error('ERROR ACTION findCarBrandById', error)

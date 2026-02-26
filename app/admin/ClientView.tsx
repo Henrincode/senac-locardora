@@ -4,11 +4,18 @@ import { useEffect, useState } from "react"
 import ModalCreateCar from "./_components/ModalCreateCar"
 import ModalCreateCategory from "./_components/ModalCreateCategory"
 import ModalCreateBrand from "./_components/ModalCreateBrand"
-import { CarModel, CarModelReturn } from "@/types/car.types"
-import { deleteCarModel } from "@/server/actions/car.action"
+import { CarBrand, CarBrandReturn, CarCategory, CarCategoryReturn, CarModel, CarModelReturn } from "@/types/car.types"
+import { deleteCarCategory, deleteCarModel } from "@/server/actions/car.action"
 
-export default function ClientViewAdmin({ cars }: { cars: CarModelReturn<CarModel[]> }) {
+interface Params {
+    cars: CarModelReturn<CarModel[]>
+    categories: CarCategoryReturn<CarCategory[]>
+    brands: CarBrandReturn<CarBrand[]>
+}
+
+export default function ClientViewAdmin({ cars, categories, brands }: Params) {
     const [modal, setModal] = useState('')
+    const [catForDel, setCatForDel] = useState<number | null>(null)
 
     function openModal(param: string) {
         setModal(param)
@@ -17,7 +24,13 @@ export default function ClientViewAdmin({ cars }: { cars: CarModelReturn<CarMode
     function closeModal() {
         setModal('')
     }
-    
+
+    async function btn_delCat() {
+        if (!catForDel) return
+        await deleteCarCategory(catForDel)
+        setCatForDel(null)
+    }
+
     useEffect(() => {
         if (modal) {
             document.body.classList.add('overflow-hidden')
@@ -44,11 +57,12 @@ export default function ClientViewAdmin({ cars }: { cars: CarModelReturn<CarMode
             <div className="bg-gray-700">
                 <div className="box flex flex-row justify-between items-center gap-2 p-2 text-white">
                     {/* logo */}
-                    <div className="font-semibold text-3xl">Alucar</div>
+                    <div className="font-semibold text-3xl">CPainel - Alucar</div>
                     {/* links */}
                     <ul className="flex flex-row gap-4">
                         <li>Carros</li>
                         <li>Reservas</li>
+                        <li>Clientes</li>
                     </ul>
                 </div>
             </div>
@@ -75,16 +89,19 @@ export default function ClientViewAdmin({ cars }: { cars: CarModelReturn<CarMode
                         <label htmlFor="" className="label">Categoria</label>
                         <button onClick={() => openModal('category')} className="text-sm">Novo</button>
                     </div>
-                    <select name="" id="" className="input">
-                        <option value="0">Todas</option>
-                        <option value="1">A - Básico</option>
-                        <option value="2">B - Intermediário</option>
-                        <option value="3">C - TOP</option>
+
+                    <select onChange={(e) => setCatForDel(Number(e.target.value))} name="" id="" className="input">
+                        <option value="0">Todas as categorias</option>
+                        {categories.success && categories.data ? categories.data.map((d: CarCategory, i: number) => (
+                            <option key={i} value={d.id_car_category}>{d.name}</option>
+                        )) : (<option defaultValue={0}>Sem categoria</option>)}
                     </select>
+
                     <div className="flex flex-row justify-between px-4">
                         <label htmlFor="" className="label">Marca</label>
                         <button onClick={() => setModal('brand')} className="text-sm">Novo</button>
                     </div>
+
                     <select name="" id="" className="input">
                         <option value="0">Todas</option>
                     </select>
