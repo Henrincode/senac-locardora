@@ -56,7 +56,7 @@ CREATE TABLE alc_car_models (
 CREATE TABLE alc_car_colors (
     id_car_color BIGSERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE, -- Ex: 'Black', 'Silver', 'White'
-    hex_code VARCHAR(7),             -- Opcional: Para exibir a cor no painel (Ex: #000000)
+    color_hex VARCHAR(7),             -- Opcional: Para exibir a cor no painel (Ex: #000000)
     created_at TIMESTAMPTZ DEFAULT NOW(),
     deleted_at TIMESTAMPTZ
 );
