@@ -24,8 +24,8 @@ const findById = unstable_cache(
         `
         return data.map(parseRentalDB)[0]
     },
-    ['client-find-by-id'],
-    { tags: ['clients'] }
+    ['rental-find-by-id'],
+    { tags: ['rentals'] }
 )
 
 // create rental
@@ -70,7 +70,7 @@ async function remove(id: number): Promise<Rental> {
     return data.map(parseRentalDB)[0]
 }
 
-const clientService = {
+const rentalService = {
     find,
     findById,
     create,
@@ -78,4 +78,4 @@ const clientService = {
     delete: remove
 }
 
-export default clientService
+export default rentalService
