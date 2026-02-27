@@ -1,8 +1,150 @@
 'use server'
 
-import { CarModelErrors, CarModel, CarModelReturn, CarCategoryReturn, CarCategory, CarCategoryErrors, CarBrandReturn, CarBrand, CarBrandErrors } from "@/types/car.types";
+import { CarModelErrors, CarModel, CarModelReturn, CarCategoryReturn, CarCategory, CarCategoryErrors, CarBrandReturn, CarBrand, CarBrandErrors, CarReturn, Car, CarErrors } from "@/types/car.types";
 import carService from "../services/car.service";
 import { updateTag } from "next/cache";
+
+// ------------------|
+// ------------------| car
+// ------------------|
+
+// find
+export async function findCar(): Promise<CarReturn<Car[]>> {
+    try {
+        const data = await carService.find()
+        return { success: true, data }
+    } catch (error) {
+        console.error('ERROR findCar', error)
+        return { success: false, message: 'Erro interno do servidor' }
+    }
+}
+
+// findById
+export async function findCarById(id: number): Promise<CarReturn<Car>> {
+    if (typeof id === 'undefined') return { success: false, message: 'Parametro ID faltando' }
+    if (isNaN(id) || id === null) return { success: false, message: 'Parametro id deve ser do um número' }
+
+    id = Number(id)
+
+    try {
+        const data = await carService.findById(id)
+        if (!data) return { success: false, message: 'Categoria não existe' }
+        return { success: true, data }
+    } catch (error) {
+        console.error('ERROR ACTION findCarById', error)
+        return { success: false, message: 'Erro interno no servidor' }
+    }
+}
+
+// create
+export async function createCar(
+    params: Car & {
+        id_car_model_fk: number
+        id_car_color_fk: number
+        id_car_status_fk: number
+        plate: string
+        year_manufacture: number
+        year_model: number
+    }
+): Promise<CarReturn<Car>> {
+
+    if (!params) return { success: false, message: 'Não foi passado nenhum pârametro' }
+    const id_car_model_fk = params.id_car_model_fk
+    const id_car_color_fk = params.id_car_color_fk
+    const id_car_status_fk = params.id_car_status_fk
+    const plate = params.plate?.toString().trim()
+    const year_manufacture = params.year_manufacture
+    const year_model = params.year_model
+
+    const errors: CarErrors = {}
+
+    if (!id_car_model_fk || isNaN(id_car_model_fk)) errors.id_car_model_fk = true
+    if (!id_car_color_fk || isNaN(id_car_color_fk)) errors.id_car_color_fk = true
+    if (!id_car_status_fk || isNaN(id_car_status_fk)) errors.id_car_status_fk = true
+    if (!year_manufacture || isNaN(year_manufacture)) errors.year_manufacture = true
+    if (!year_model || isNaN(year_model)) errors.year_model = true
+    if (!plate) errors.plate = true
+
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
+
+    try {
+        params = {
+            id_car_model_fk, id_car_color_fk, id_car_status_fk, plate, year_manufacture, year_model
+        }
+
+        const data = await carService.create(params)
+        updateTag('cars')
+        return { success: true, data }
+    } catch (error) {
+        console.error('ERROR createCarModel', error)
+        return { success: false, message: 'Erro interno no servidor' }
+    }
+}
+
+// update
+export async function updateCar(
+    params: Car & {
+        id_car: number
+        id_car_model_fk: number
+        id_car_color_fk: number
+        id_car_status_fk: number
+        plate: string
+        year_manufacture: number
+        year_model: number
+    }
+): Promise<CarReturn<Car>> {
+
+    if (!params) return { success: false, message: 'Não foi passado nenhum pârametro' }
+    const id_car = params.id_car
+    const id_car_model_fk = params.id_car_model_fk
+    const id_car_color_fk = params.id_car_color_fk
+    const id_car_status_fk = params.id_car_status_fk
+    const plate = params.plate?.toString().trim()
+    const year_manufacture = params.year_manufacture
+    const year_model = params.year_model
+
+    const errors: CarErrors = {}
+
+    if (!id_car || isNaN(id_car)) errors.id_car = true
+    if (!id_car_model_fk || isNaN(id_car_model_fk)) errors.id_car_model_fk = true
+    if (!id_car_color_fk || isNaN(id_car_color_fk)) errors.id_car_color_fk = true
+    if (!id_car_status_fk || isNaN(id_car_status_fk)) errors.id_car_status_fk = true
+    if (!year_manufacture || isNaN(year_manufacture)) errors.year_manufacture = true
+    if (!year_model || isNaN(year_model)) errors.year_model = true
+    if (!plate) errors.plate = true
+
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
+
+    try {
+        params = {
+            id_car, id_car_model_fk, id_car_color_fk, id_car_status_fk, plate, year_manufacture, year_model
+        }
+
+        const data = await carService.create(params)
+        updateTag('cars')
+        return { success: true, data }
+    } catch (error) {
+        console.error('ERROR createCarModel', error)
+        return { success: false, message: 'Erro interno no servidor' }
+    }
+}
+
+// delete
+export async function deleteCar(id: number): Promise<CarReturn<Car>> {
+    if (!id || isNaN(id)) return { success: false, message: 'ID não informado' }
+    try {
+        const data = await carService.delete(id)
+        updateTag('cars')
+        return { success: true, data }
+    } catch (error) {
+        console.error(error)
+        return { success: false, message: 'Erro interno no servidor' }
+    }
+}
+
+// ------------------|
+// ------------------| Model
+// ------------------|
 
 // findModel
 export async function findCarModel(): Promise<CarModelReturn<CarModel[]>> {
@@ -33,7 +175,7 @@ export async function createCarModel(
     if (!id_car_brand_fk || isNaN(id_car_brand_fk)) errors.id_car_brand_fk = true
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -69,7 +211,7 @@ export async function updateCarModel(
     if (!id_car_brand_fk || isNaN(id_car_brand_fk)) errors.id_car_brand_fk = true
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -142,7 +284,7 @@ export async function createCarCategory(
 
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -171,7 +313,7 @@ export async function updateCarCategory(
     if (!id_car_category || isNaN(id_car_category)) errors.id_car_category = true
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -242,7 +384,7 @@ export async function createCarBrand(
 
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -271,7 +413,7 @@ export async function updateCarBrand(
     if (!id_car_brand || isNaN(id_car_brand)) errors.id_car_brand = true
     if (!name) errors.name = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {

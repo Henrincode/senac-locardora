@@ -1,3 +1,37 @@
+// ------------------|
+// ------------------| Car
+// ------------------|
+
+export type Car = {
+    id_car?: number | string
+    id_car_model_fk?: number | string
+    id_car_color_fk?: number | string
+    id_car_status_fk?: number | string
+    plate?: string
+    year_manufacture?: number
+    year_model?: number
+    created_at?: number
+    deleted_at?: number
+
+    category?: string
+    brand?: string
+    color?: string
+    color_hex?: string
+    status?: string
+}
+
+export type CarErrors = {
+    [K in keyof Omit<Car, 'category' | 'brand' | 'color' | 'color_hex' | 'status'>]?: boolean
+}
+
+export type CarReturn<T> =
+    | { success: true; data: T; message?: string }
+    | { success: false; data?: never; message: string; errors?: CarErrors };
+
+// ------------------|
+// ------------------| Model
+// ------------------|
+
 export interface CarModel {
     id_car_model?: number
     id_car_brand_fk?: number
@@ -15,12 +49,9 @@ export type CarModelErrors = {
     [K in keyof Omit<CarModel, 'category' | 'brand'>]?: boolean
 }
 
-export interface CarModelReturn<T> {
-    data?: T
-    success: boolean
-    message?: string
-    errors?: CarModelErrors
-}
+export type CarModelReturn<T> =
+    | { success: true; data: T; message?: string }
+    | { success: false; data?: never; message: string; errors?: CarModelErrors };
 
 // ------------------|
 // ------------------| Category
@@ -39,12 +70,9 @@ export type CarCategoryErrors = {
     [K in keyof CarCategory]?: boolean
 }
 
-export interface CarCategoryReturn<T> {
-    data?: T
-    success: boolean
-    message?: string
-    errors?: CarCategoryErrors
-}
+export type CarCategoryReturn<T> =
+    | { success: true; data: T; message?: string }
+    | { success: false; data?: never; message: string; errors?: CarCategoryErrors };
 
 // ------------------|
 // ------------------| brand
@@ -62,9 +90,6 @@ export type CarBrandErrors = {
     [K in keyof CarBrand]?: boolean
 }
 
-export interface CarBrandReturn<T> {
-    data?: T
-    success: boolean
-    message?: string
-    errors?: CarBrandErrors
-}
+export type CarBrandReturn<T> =
+    | { success: true; data: T; message?: string }
+    | { success: false; data?: never; message: string; errors?: CarBrandErrors };

@@ -1,20 +1,41 @@
-import { Client } from "@/types/client.types";
+import { Rental } from "@/types/rental.types";
 import { unstable_cache } from "next/cache";
 import sql from "../db";
 
-// find client
+// find rental
 const find = unstable_cache(
-    async (): Promise<Client[]> => {
-        const data = await sql<Client[]>`
-            SELECT * FROM alc_clients
+    async (): Promise<Rental[]> => {
+        const data = await sql<Rental[]>`
+            SELECT 
+            ren.id_rental,
+            ren.id_client_fk,
+            ren.id_car_fk,
+            ren.id_rental_status_fk,
+            pickup_date,
+            return_date,
+            notes,
+            cli
         `
-        return data.map((d: Client) => ({
+        // id_rental?: number
+        // id_client_fk?: number
+        // id_car_model_fk?: number
+        // id_status_fk?: number
+        // pickup_date?: Date
+        // return_date?: Date
+        // total_price?: number
+        // notes?: string
+        // created_at?: Date
+        // deleted_at?: Date
+        return data.map((d: Rental) => ({
             ...d,
-            id_client: Number(d.id_client)
-        })) as Client[]
+            id_rental: Number(d.id_rental),
+            id_client_fk: Number(d.id_client_fk),
+            id_car_model_fk: Number(d.id_car_model_fk),
+            id_status_fk: Number(d.id_status_fk)
+        }))
     },
-    ['clients'],
-    { tags: ['clients'] }
+    ['rentals'],
+    { tags: ['rentals'] }
 )
 
 // find client by id

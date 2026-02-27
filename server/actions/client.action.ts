@@ -44,7 +44,7 @@ export async function createClient(params: Client & { name: string, email: strin
     if (!name) errors.name = true
     if (!email) errors.email = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {
@@ -72,7 +72,7 @@ export async function updateClient(params: Client & { id_client: number, name: s
     if (!name) errors.name = true
     if (!email) errors.email = true
 
-    if (Object.keys(errors).length > 0) return { success: false, errors }
+    if (Object.keys(errors).length > 0) return { success: false, errors, message: 'Campos inválidos' }
 
     try {
         params = {

@@ -92,7 +92,7 @@ export default function ClientViewAdmin({ cars, categories, brands }: Params) {
 
                     <select onChange={(e) => setCatForDel(Number(e.target.value))} name="" id="" className="input">
                         <option value="0">Todas as categorias</option>
-                        {categories.success && categories.data ? categories.data.map((d: CarCategory, i: number) => (
+                        {categories.success ? categories.data.map((d: CarCategory, i: number) => (
                             <option key={i} value={d.id_car_category}>{d.name}</option>
                         )) : (<option defaultValue={0}>Sem categoria</option>)}
                     </select>
