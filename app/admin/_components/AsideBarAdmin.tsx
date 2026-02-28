@@ -3,11 +3,13 @@
 export default function AsideBarAdmin() {
     return (
         <aside className="
+            flex
+            flex-col
+            gap-4
             w-60
-            h-100
-            p-2
+            p-4
             rounded-xl
-            bg-amber-50
+            bg-white
 
             [&_ul]:ml-4
             [&_p]:text-lg
