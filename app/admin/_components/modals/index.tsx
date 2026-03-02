@@ -20,18 +20,19 @@ export default function ModalsAdm({ setModal, modal }: { setModal: any, modal: s
     }, [modal])
 
     return (
-        < div onMouseDown={() => setModal('')} className={
+        <div onMouseDown={() => setModal('')} className={
             `
                 ${modal ? "absolute" : "hidden"}
-                z-100 left-0 top-0
-                flex justify-center items-center
+                z-100 left-0 top-0 overflow-auto
                 w-dvw h-dvh p-2 backdrop-blur
             `}>
-            {modal === 'car' && <ModalCreateCar closeModal={() => setModal('')} />}
-            {modal === 'carModel' && <ModalCreateCarModel closeModal={() => setModal('')} />}
-            {modal === 'carCategory' && <ModalCreateCarCategory closeModal={() => setModal('')} />}
-            {modal === 'carBrand' && <ModalCreateCarBrand closeModal={() => setModal('')} />}
-            {modal === 'carColor' && <ModalCreateCarColor closeModal={() => setModal('')} />}
+            <div className="flex justify-center items-center h-full">
+                {modal === 'car' && <ModalCreateCar closeModal={() => setModal('')} />}
+                {modal === 'carModel' && <ModalCreateCarModel closeModal={() => setModal('')} />}
+                {modal === 'carCategory' && <ModalCreateCarCategory closeModal={() => setModal('')} />}
+                {modal === 'carBrand' && <ModalCreateCarBrand closeModal={() => setModal('')} />}
+                {modal === 'carColor' && <ModalCreateCarColor closeModal={() => setModal('')} />}
+            </div>
         </div >
     )
 }

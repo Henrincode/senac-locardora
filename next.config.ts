@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'api.dicebear.com' },
       { protocol: 'https', hostname: '*.supabase.co' },
-      { protocol: 'https', hostname: 'freepngimg.com' },
+      { protocol: 'https', hostname: '*.depositphotos.com' },
     ],
   },
 };
