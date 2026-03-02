@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ModalsAdm from "./modals";
+import { FaBars } from "react-icons/fa";
 
 export default function NavBarAdm() {
     const router = useRouter()
@@ -30,9 +31,10 @@ export default function NavBarAdm() {
                             CPainel - Alucar
                         </Link>
                     </div>
-                    {/* links */}
+                    {/* links desktop */}
                     <ul className="
-                        flex flex-row gap-4
+                        hidden
+                        lg:flex flex-row gap-4
 
                         [&_li]:relative
 
@@ -82,6 +84,11 @@ export default function NavBarAdm() {
                             </div>
                         </li>
                     </ul>
+
+                    {/* links mobile */}
+                    <div onClick={() => setModal('navMobile')} className="lg:hidden p-2 rounded-md bg-gray-400 cursor-pointer">
+                        <FaBars />
+                    </div>
                 </div>
             </nav>
         </>

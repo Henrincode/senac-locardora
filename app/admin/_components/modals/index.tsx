@@ -6,6 +6,7 @@ import ModalCreateCarModel from "./ModalCreateCarModel"
 import ModalCreateCarCategory from "./ModalCreateCarCategory"
 import ModalCreateCarBrand from "./ModalCreateCarBrand"
 import ModalCreateCarColor from "./ModalCreateCarColor"
+import ModalNavMobile from "./ModalNavMobile"
 
 export default function ModalsAdm({ setModal, modal }: { setModal: any, modal: string }) {
 
@@ -27,6 +28,7 @@ export default function ModalsAdm({ setModal, modal }: { setModal: any, modal: s
                 w-dvw h-dvh p-2 backdrop-blur
             `}>
             <div className="flex justify-center items-center h-full">
+                {modal === 'navMobile' && <ModalNavMobile setModal={setModal} closeModal={() => setModal('')} />}
                 {modal === 'car' && <ModalCreateCar closeModal={() => setModal('')} />}
                 {modal === 'carModel' && <ModalCreateCarModel closeModal={() => setModal('')} />}
                 {modal === 'carCategory' && <ModalCreateCarCategory closeModal={() => setModal('')} />}
